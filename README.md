@@ -89,6 +89,7 @@ Whether go1.27 makes any of them worthwhile is tracked in [unmango/go#198](https
 ```shell
 nix develop   # or: direnv allow
 make test     # Ginkgo suites
-make check    # nix flake check: build, tests, formatting
+make check    # nix flake check: flake evaluation and formatting
+make build    # nix build: runs the Ginkgo suites inside the Nix build
 make tidy     # go mod tidy and gomod2nix
 ```

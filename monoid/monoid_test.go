@@ -79,6 +79,22 @@ var _ = Describe("Monoid", func() {
 			Expect(y).To(Equal([]int{0, 2}))
 		})
 
+		It("Slice should not alias a when b is empty", func() {
+			a := []int{1, 2}
+
+			x := monoid.Slice[int]().Combine(a, nil)
+			x[0] = 9
+
+			Expect(a).To(Equal([]int{1, 2}))
+		})
+
+		It("Slice should keep a non-nil empty right operand under the identity", func() {
+			m := monoid.Slice[int]()
+
+			Expect(m.Combine(m.Empty(), []int{})).To(Equal([]int{}))
+			Expect(m.Combine(m.Empty(), m.Empty())).To(BeNil())
+		})
+
 		It("All should satisfy the laws", func() {
 			laws(monoid.All(), true, false, true)
 			Expect(monoid.All().Empty()).To(BeTrue())

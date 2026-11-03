@@ -3,7 +3,7 @@ package pipe
 
 // Pipe returns a function that applies fa and then fb.
 //
-//	pipe.Pipe(strings.TrimSpace, strconv.Atoi)
+//	pipe.Pipe(strings.TrimSpace, strings.ToUpper)
 func Pipe[A, B, C any](fa func(A) B, fb func(B) C) func(A) C {
 	return func(a A) C {
 		return fb(fa(a))

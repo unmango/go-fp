@@ -77,4 +77,4 @@ jobs:
           cache-dependency-path: go.sum
 
       - run: nix develop -c make tidy
-      - run: git diff --exit-code nix/gomod2nix.toml
+      - run: git diff --exit-code go.mod go.sum nix/gomod2nix.toml

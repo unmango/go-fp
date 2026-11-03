@@ -11,6 +11,8 @@ else
 TEST_FLAGS := --github-output --race --trace --coverprofile=cover.profile
 endif
 
+.PHONY: build test check update tidy clean
+
 build:
 	$(NIX) build --no-substitute
 

@@ -3,6 +3,7 @@ package monoid
 
 import (
 	"iter"
+	"slices"
 
 	"go.unmango.dev/fp/semigroup"
 )
@@ -46,11 +47,13 @@ func Method[T semigroup.Combinable[T]](empty T) Monoid[T] {
 }
 
 // Sum adds numbers, with 0 as the identity.
+// Floating-point addition is only approximately associative, so folding floats in a different order can round differently.
 func Sum[T Number]() Monoid[T] {
 	return Lift(0, func(a, b T) T { return a + b })
 }
 
 // Product multiplies numbers, with 1 as the identity.
+// Floating-point multiplication is only approximately associative, as with Sum.
 func Product[T Number]() Monoid[T] {
 	return Lift(1, func(a, b T) T { return a * b })
 }
@@ -66,7 +69,13 @@ func String() Monoid[string] {
 // and folding many slices is quadratic; prefer slices.Concat for large inputs.
 func Slice[T any]() Monoid[[]T] {
 	return Lift(nil, func(a, b []T) []T {
-		return append(a[:len(a):len(a)], b...)
+		if a == nil {
+			if b == nil {
+				return nil
+			}
+			return append([]T{}, b...)
+		}
+		return append(slices.Clone(a), b...)
 	})
 }
 
