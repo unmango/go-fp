@@ -1,0 +1,13 @@
+bin/
+report.json
+cover*
+go.work*
+.vscode/settings.json
+.make/
+*.test
+.envrc
+.direnv/
+*.out
+/result
+!/result/
+.claude/*.local.json
