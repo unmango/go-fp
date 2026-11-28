@@ -15,6 +15,15 @@
       url = "github:nix-community/gomod2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    mynix = {
+      url = "github:UnstoppableMango/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.gomod2nix.follows = "gomod2nix";
+      inputs.systems.follows = "systems";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
   };
 
   outputs =
@@ -24,10 +33,12 @@
       imports = with inputs; [
         systems.flakeModule or { }
         treefmt-nix.flakeModule
+        mynix.flakeModules.ci
       ];
 
       perSystem =
         {
+          config,
           inputs',
           pkgs,
           lib,
@@ -52,6 +63,14 @@
             pname = "fp";
             version = (lib.importJSON ./.release-please-manifest.json).".";
           };
+
+          # `nix flake check` builds no packages, and this one runs the suites.
+          checks.test = config.packages.default;
+
+          ci.fixup.steps = [
+            "nix develop --command go mod tidy"
+            "nix develop --command gomod2nix generate --outdir nix"
+          ];
 
           devShells.default = pkgs.mkShell {
             buildInputs = with pkgs; [
