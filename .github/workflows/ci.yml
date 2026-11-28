@@ -10,7 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  # Hercules CI builds Linux; the hosted jobs and the gate come from unmango/ci.
   nix:
     uses: unmango/ci/.github/workflows/nix-ci.yml@30ae545a17dc3cd88663c8d0aa92ae374b62779c
     permissions:
@@ -41,7 +40,7 @@ jobs:
           use_oidc: true
           files: cover.profile
 
-  # go mod tidy and gomod2nix fetch modules, so this can't be a flake check.
+  # Fetches modules, so it can't be a flake check.
   tidy:
     name: Tidy
     runs-on: ubuntu-latest
